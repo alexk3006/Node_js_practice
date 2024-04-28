@@ -1,24 +1,21 @@
-import { drizzle } from 'drizzle-orm/node-postgres';
+const { drizzle } = require('drizzle-orm/node-postgres')
 
-import { Client } from 'pg';
+const { Client } = require('pg')
 
-import * as schema from './schema';
-
+const schema = require('./schema')
 
 const client = new Client({
+	host: '127.0.0.1',
 
-   host: '127.0.0.1',
+	port: 5432,
 
-   port: 5432,
+	user: 'nodejs_course_admin',
 
-   user: 'nodejs_course_admin',
+	password: 'my_password',
 
-   password: 'my_password',
+	database: 'nodejs_course_database',
+})
 
-   database: 'nodejs_course_database',
+client.connect()
 
-});
-
-await client.connect();
-
-export const db = drizzle(client, { schema });
+module.exports = drizzle(client, { schema })

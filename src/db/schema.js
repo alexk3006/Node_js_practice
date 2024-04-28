@@ -1,31 +1,37 @@
-import { sql } from 'drizzle-orm';
+const { sql } = require('drizzle-orm')
 
-import { integer, pgTable, serial, varchar, timestamp } from 'drizzle-orm/pg-core';
+const {
+	integer,
+	pgTable,
+	serial,
+	varchar,
+	timestamp,
+} = require('drizzle-orm/pg-core')
 
+const users = pgTable('users', {
+	id: serial('id').primaryKey(),
 
-export const users = pgTable('users', {
+	name: varchar('name', { length: 256 }),
 
-   id: serial('id').primaryKey(),
+	email: varchar('email', { length: 256 }),
 
-   name: varchar('name', { length: 256 }),
+	createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+})
 
-   email: varchar('email', { length: 256 }),
+const products = pgTable('products', {
+	id: serial('id').primaryKey(),
 
-   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`)
+	name: varchar('name', { length: 256 }),
 
-});
+	brand: varchar('brand', { length: 256 }),
 
+	userId: integer('user_id').references(() => users.id),
 
-export const products = pgTable('products', {
+	createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`),
+})
 
-   id: serial('id').primaryKey(),
+module.exports = {
+	users,
 
-   name: varchar('name', { length: 256 }),
-
-   brand: varchar('brand', { length: 256 }),
-
-   userId: integer('user_id').references(() => users.id),
-
-   createdAt: timestamp('created_at').default(sql`CURRENT_TIMESTAMP`)
-
-});
+	products,
+}
